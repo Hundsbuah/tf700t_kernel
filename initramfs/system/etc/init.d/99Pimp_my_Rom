@@ -1,0 +1,200 @@
+#!/system/bin/sh
+for sqlite3 in \ 
+/data/data/com.asus.services/databases/LowBatteryService.db
+/data/data/com.google.android.apps.maps/databases/webviewCookiesChromium.db
+/data/data/com.google.android.apps.maps/databases/webviewCookiesChromiumPrivate.db
+/data/data/com.asus.weather/databases/weather.db
+/data/data/com.android.launcher/databases/launcher.db
+/data/data/com.android.providers.userdictionary/databases/user_dict.db
+/data/data/com.android.email/databases/EmailProvider.db
+/data/data/com.android.email/databases/EmailProviderBody.db
+/data/data/com.android.email/databases/EmailProviderBackup.db
+/data/data/com.android.deskclock/databases/alarms.db
+/data/data/com.android.providers.downloads/databases/downloads.db
+/data/data/com.android.bluetooth/databases/btopp.db
+/data/data/com.android.gallery3d/databases/picasa.db
+/data/data/com.android.gallery3d/databases/download.db
+/data/data/com.google.android.gms/databases/plus.db
+/data/data/com.google.android.partnersetup/databases/rlz_data.db
+/data/data/com.android.providers.contacts/databases/profile.db
+/data/data/com.android.providers.contacts/databases/contacts2.db
+/data/data/com.android.keychain/databases/grants.db
+/data/data/com.android.vending/databases/localappstate.db
+/data/data/com.android.vending/databases/library.db
+/data/data/com.android.vending/databases/suggestions.db
+/data/data/com.google.android.youtube/databases/google_analytics.db
+/data/data/com.google.android.youtube/databases/downloads.db
+/data/data/com.dropbox.android/databases/db.db
+/data/data/com.dropbox.android/databases/prefs.db
+/data/data/com.google.android.gsf/databases/gservices.db
+/data/data/com.google.android.gsf/databases/googlesettings.db
+/data/data/com.google.android.gsf/databases/subscribedfeeds.db
+/data/data/com.google.android.gsf/databases/talk.db
+/data/data/com.android.providers.media/databases/internal.db
+/data/data/com.android.providers.media/databases/external.db
+/data/data/com.android.providers.telephony/databases/telephony.db
+/data/data/com.android.providers.telephony/databases/mmssms.db
+/data/data/com.android.providers.settings/databases/settings.db
+/data/data/com.android.providers.calendar/databases/calendar.db
+/data/data/org.adaway/databases/adaway.db
+/data/data/com.android.browser/databases/autofill.db
+/data/data/com.android.browser/databases/browser2.db
+/data/data/com.android.browser/databases/webviewCookiesChromium.db
+/data/data/com.android.browser/databases/webviewCookiesChromiumPrivate.db
+/data/data/com.android.browser/databases/webview.db
+/data/data/com.android.browser/databases/snapshots.db
+/data/data/com.android.browser/app_appcache/ApplicationCache.db
+/data/data/com.android.browser/app_icons/WebpageIcons.db
+/data/data/com.android.browser/app_databases/Databases.db
+/data/data/com.android.browser/app_databases/http_m.facebook.com_0/0000000000000001.db
+/data/data/com.android.browser/app_geolocation/CachedGeoposition.db
+/data/data/com.quoord.tapatalkHD/databases/tapatalknew.db
+/data/data/com.quoord.tapatalkHD/databases/google_analytics_v2.db
+/data/data/com.starfinanz.smob.android.sfinanzstatus/databases/StarMoney.db
+/data/data/com.starfinanz.smob.android.sfinanzstatus/databases/webview.db
+/data/data/com.starfinanz.smob.android.sfinanzstatus/databases/webviewCookiesChromium.db
+/data/data/com.starfinanz.smob.android.sfinanzstatus/databases/bank.db
+/data/data/com.starfinanz.smob.android.sfinanzstatus/databases/webviewCookiesChromiumPrivate.db
+/data/data/com.mxtech.videoplayer.ad/databases/videos.db
+/data/data/com.mxtech.videoplayer.ad/databases/webview.db
+/data/data/com.mxtech.videoplayer.ad/databases/webviewCookiesChromium.db
+/data/data/com.mxtech.videoplayer.ad/databases/webviewCookiesChromiumPrivate.db
+/data/data/app.luckyyu.gread.freetoole/databases/webview.db
+/data/data/app.luckyyu.gread.freetoole/databases/webviewCookiesChromium.db
+/data/data/app.luckyyu.gread.freetoole/databases/webviewCookiesChromiumPrivate.db
+/data/data/de.gmx.mobile.android.mail/databases/13a1fa80-468f-43fb-94b7-6e4e1850ec0e.db
+/data/data/de.gmx.mobile.android.mail/databases/webview.db
+/data/data/de.gmx.mobile.android.mail/databases/webviewCookiesChromium.db
+/data/data/de.gmx.mobile.android.mail/databases/webviewCookiesChromiumPrivate.db
+/data/data/com.s0up.goomanager/databases/webview.db
+/data/data/com.s0up.goomanager/databases/webviewCookiesChromium.db
+/data/data/com.rhmsoft.fm.hd/databases/webview.db
+/data/data/com.rhmsoft.fm.hd/databases/rhmsoft.fm.db
+/data/data/com.rhmsoft.fm.hd/databases/webviewCookiesChromium.db
+/data/data/com.rhmsoft.fm.hd/databases/webviewCookiesChromiumPrivate.db
+/data/data/net.hubalek.android.apps.reborn.pro/databases/google_analytics_v2.db
+/data/data/com.sand.airdroid/databases/google_analytics.db
+/data/data/com.sand.airdroid/databases/webview.db
+/data/data/com.sand.airdroid/databases/webviewCookiesChromium.db
+/data/data/com.sand.airdroid/databases/webviewCookiesChromiumPrivate.db
+/data/data/com.sand.airdroid/databases/caches.db
+/data/data/com.imo.android.imoimbeta/databases/places.db
+/data/data/com.imo.android.imoimbeta/databases/webview.db
+/data/data/com.imo.android.imoimbeta/databases/webviewCookiesChromium.db
+/data/data/com.imo.android.imoimbeta/databases/webviewCookiesChromiumPrivate.db
+/data/data/com.onelouder.baconreader/databases/cache.db
+/data/data/com.onelouder.baconreader/databases/purchase.db
+/data/data/com.onelouder.baconreader/databases/google_analytics.db
+/data/data/com.onelouder.baconreader/databases/webview.db
+/data/data/com.onelouder.baconreader/databases/webviewCookiesChromium.db
+/data/data/com.onelouder.baconreader/databases/webviewCookiesChromiumPrivate.db
+/data/data/cm.aptoide.pt/databases/aptoide.db
+/data/data/cm.aptoide.pt/databases/extras.db
+/data/data/com.box.android/databases/google_analytics.db
+/data/data/com.grilledmonkeydonate.lagfix/databases/webview.db
+/data/data/com.grilledmonkeydonate.lagfix/databases/webviewCookiesChromium.db
+/data/data/com.opera.browser/databases/webview.db
+/data/data/com.opera.browser/databases/google_analytics.db
+/data/data/com.opera.browser/databases/google_analytics_v2.db
+/data/data/com.opera.browser/databases/webviewCookiesChromium.db
+/data/data/com.opera.browser/databases/webviewCookiesChromiumPrivate.db
+/data/data/com.antivirus/databases/webview.db
+/data/data/com.antivirus/databases/google_analytics.db
+/data/data/uk.co.senab.blueNotifyFree/databases/accounts.db
+/data/data/uk.co.senab.blueNotifyFree/databases/google_analytics.db
+/data/data/uk.co.senab.blueNotifyFree/databases/webviewCookiesChromium.db
+/data/data/uk.co.senab.blueNotifyFree/databases/webviewCookiesChromiumPrivate.db
+/data/data/uk.co.senab.blueNotifyFree/databases/webview.db
+/data/data/uk.co.senab.blueNotifyFree/databases/billing.db
+/data/data/uk.co.senab.blueNotifyFree/databases/oms.db
+/data/data/com.speedsoftware.rootexplorer/databases/explorer.db
+/data/data/com.quoord.xdapad.activity/databases/google_analytics.db
+/data/data/com.quoord.xdapad.activity/databases/tapatalk.db
+/data/data/com.alphonso.pulse/databases/webview.db
+/data/data/com.alphonso.pulse/databases/webviewCookiesChromium.db
+/data/data/com.alphonso.pulse/databases/webviewCookiesChromiumPrivate.db
+/data/data/com.bonfiremedia.android_wikimobile2pro/databases/google_analytics.db
+/data/data/com.bonfiremedia.android_wikimobile2pro/databases/webview.db
+/data/data/com.bonfiremedia.android_wikimobile2pro/databases/millennialmedia.db
+/data/data/com.bonfiremedia.android_wikimobile2pro/databases/webviewCookiesChromium.db
+/data/data/com.bonfiremedia.android_wikimobile2pro/databases/webviewCookiesChromiumPrivate.db
+/data/data/com.farproc.wifi.analyzer/databases/webview.db
+/data/data/com.farproc.wifi.analyzer/databases/webviewCookiesChromium.db
+/data/data/com.teslacoilsw.launcher/databases/launcher.db
+/data/data/com.teslacoilsw.launcher/databases/google_analytics_v2.db
+/data/data/com.bvalosek.cpuspy.realgpp/databases/webview.db
+/data/data/com.bvalosek.cpuspy.realgpp/databases/webviewCookiesChromium.db
+/data/data/com.bvalosek.cpuspy.realgpp/databases/webviewCookiesChromiumPrivate.db
+/data/data/com.aurorasoftworks.quadrant.ui.standard/databases/webview.db
+/data/data/com.aurorasoftworks.quadrant.ui.standard/databases/webviewCookiesChromium.db
+/data/data/com.aurorasoftworks.quadrant.ui.standard/databases/quadrant.db
+/data/media/openfeint/webui/manifest.db
+/data/zipalign.db
+/data/system/users/0/accounts.db
+/data/system/locksettings.db
+/data/.profiles/2/data/com.asus.services/databases/LowBatteryService.db
+/data/.profiles/2/data/com.asus.weather/databases/weather.db
+/data/.profiles/2/data/com.android.launcher/databases/launcher.db
+/data/.profiles/2/data/com.android.email/databases/EmailProvider.db
+/data/.profiles/2/data/com.android.email/databases/EmailProviderBody.db
+/data/.profiles/2/data/com.android.email/databases/EmailProviderBackup.db
+/data/.profiles/2/data/com.android.deskclock/databases/alarms.db
+/data/.profiles/2/data/com.android.providers.downloads/databases/downloads.db
+/data/.profiles/2/data/com.android.gallery3d/databases/picasa.db
+/data/.profiles/2/data/com.google.android.gms/databases/plus.db
+/data/.profiles/2/data/com.google.android.partnersetup/databases/rlz_data.db
+/data/.profiles/2/data/com.android.providers.contacts/databases/profile.db
+/data/.profiles/2/data/com.android.providers.contacts/databases/contacts2.db
+/data/.profiles/2/data/com.android.keychain/databases/grants.db
+/data/.profiles/2/data/com.android.vending/databases/localappstate.db
+/data/.profiles/2/data/com.android.vending/databases/library.db
+/data/.profiles/2/data/com.google.android.youtube/databases/google_analytics.db
+/data/.profiles/2/data/com.google.android.youtube/databases/downloads.db
+/data/.profiles/2/data/com.dropbox.android/databases/db.db
+/data/.profiles/2/data/com.dropbox.android/databases/prefs.db
+/data/.profiles/2/data/com.google.android.gsf/databases/gservices.db
+/data/.profiles/2/data/com.google.android.gsf/databases/googlesettings.db
+/data/.profiles/2/data/com.google.android.gsf/databases/subscribedfeeds.db
+/data/.profiles/2/data/com.google.android.gsf/databases/talk.db
+/data/.profiles/2/data/com.android.providers.media/databases/internal.db
+/data/.profiles/2/data/com.android.providers.media/databases/external.db
+/data/.profiles/2/data/com.android.providers.telephony/databases/telephony.db
+/data/.profiles/2/data/com.android.providers.settings/databases/settings.db
+/data/.profiles/2/data/com.android.providers.calendar/databases/calendar.db
+/data/.profiles/2/data/com.android.browser/databases/browser2.db
+/data/.profiles/2/data/com.android.browser/databases/autofill.db
+/data/.profiles/2/system/users/0/accounts.db
+/data/.profiles/2/system/locksettings.db; do \ 
+/system/xbin/sqlite3  'VACUUM;';
+/system/xbin/sqlite3  'REINDEX;'; done;
+### Pimp my Rom : Ext4 File-Systems optimization & instant-mount
+busybox mount -o remount,noatime,noauto_da_alloc,nodiratime,barrier =0,nobh /system
+busybox mount -o remount,noatime,noauto_da_alloc,nosuid,nodev,nodir atime,barrier=0,nobh /data
+busybox mount -o remount,noatime,noauto_da_alloc,nosuid,nodev,nodir atime,barrier=0,nobh /cache
+### Pimp my Rom : External SD I/O Tweaks
+echo 128 > /sys/devices/virtual/bdi/7:0/read_ahead_kb
+echo 128 > /sys/devices/virtual/bdi/7:1/read_ahead_kb
+echo 128 > /sys/devices/virtual/bdi/7:2/read_ahead_kb
+echo 128 > /sys/devices/virtual/bdi/7:3/read_ahead_kb
+echo 128 > /sys/devices/virtual/bdi/7:4/read_ahead_kb
+echo 128 > /sys/devices/virtual/bdi/7:5/read_ahead_kb
+echo 128 > /sys/devices/virtual/bdi/7:6/read_ahead_kb
+echo 128 > /sys/devices/virtual/bdi/7:7/read_ahead_kb
+echo 4096 > /sys/devices/virtual/bdi/179:0/read_ahead_kb
+echo 4096 > /sys/devices/virtual/bdi/default/read_ahead_kb
+echo 97 > /sys/devices/virtual/bdi/179:0/max_ratio
+echo 97 > /sys/devices/virtual/bdi/default/max_ratio
+echo 4096 > /sys/devices/virtual/bdi/179:0/read_ahead_kb;
+### Pimp my Rom : Battery Savings
+echo 500 > /proc/sys/vm/dirty_expire_centisecs
+echo 1000 > /proc/sys/vm/dirty_writeback_centisecs
+### Pimp my Rom : Force GPU Rendering on 2d Operations (init.d part)
+cp -pf /system/lib/egl/libGLES_android.so /sdcard/Android/data/com.androguide.pimp.my.rom/files/libGLES_android.so
+rm -f /system/lib/egl/libGLES_android.so
+sed -i '/0 0 android/d' /system/lib/egl/egl.cfg
+### Pimp my Rom : High Minfree Values
+echo '6400,8960,19200,23040,38400,64000' > /sys/module/lowmemorykiller/parameters/minfree
+### Pimp my Rom : 128mb zRam Compression
+/system/xbin/busybox mkswap /dev/block/zram0
+/system/xbin/busybox swapon /dev/block/zram0
+echo 134217728 >  /sys/block/zram0/disksize
