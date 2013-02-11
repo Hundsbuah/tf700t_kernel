@@ -317,7 +317,7 @@ static void cpufreq_brazilianwax_freq_change_time_work(struct work_struct *work)
         struct brazilianwax_info_s *this_brazilianwax;
         struct cpufreq_policy *policy;
         unsigned int relation = CPUFREQ_RELATION_L;
-        cpumask_t tmp_mask = work_cpumask;
+        cpumask_t *tmp_mask = &work_cpumask;
         for_each_cpu(cpu, tmp_mask) {
                 this_brazilianwax = &per_cpu(brazilianwax_info, cpu);
                 policy = this_brazilianwax->cur_policy;
@@ -793,7 +793,7 @@ static int __init cpufreq_brazilianwax_init(void)
         }
 
         /* Scale up is high priority */
-        up_wq = create_rt_workqueue("kbrazilianwax_up");
+        up_wq = create_workqueue("kbrazilianwax_up");
         down_wq = create_workqueue("kbrazilianwax_down");
 
         INIT_WORK(&freq_scale_work, cpufreq_brazilianwax_freq_change_time_work);
