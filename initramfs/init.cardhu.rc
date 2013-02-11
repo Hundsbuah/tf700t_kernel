@@ -24,10 +24,10 @@ on early-init
     mkdir /Removable 0755 media_rw media_rw
 
 on early-boot
-    #write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
-    #write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
-    #write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
-    #write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
 
 on fs
     setprop ro.crypto.tmpfs_options size=128m,mode=0771,uid=1000,gid=1000
@@ -126,28 +126,28 @@ on boot
     write /sys/devices/system/cpu/cpufreq/conservative/down_threshold 75
     write /sys/devices/system/cpu/cpufreq/conservative/freq_step 3
 
-    #write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
-    #write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
-    #write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
-    #write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
-    #write /sys/devices/system/cpu/cpufreq/interactive/boost_factor 2
-    #write /sys/devices/system/cpu/cpufreq/interactive/input_boost 1
-    #write /sys/devices/system/cpu/cpufreq/interactive/sustain_load 80
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpufreq/interactive/boost_factor 2
+    write /sys/devices/system/cpu/cpufreq/interactive/input_boost 1
+    write /sys/devices/system/cpu/cpufreq/interactive/sustain_load 80
     write /sys/module/cpu_tegra3/parameters/auto_hotplug 1
     #write /sys/module/cpuidle_t3/parameters/lp2_0_in_idle 0
     write /sys/module/cpuidle/parameters/lp2_in_idle 0
 
 # Interactive governor settings
-    #chown system system /sys/devices/system/cpu/cpufreq/interactive/boost_factor
-    #chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boost_factor
-    #chown system system /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load
-    #chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load
-    #chown system system /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
-    #chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
-    #chown system system /sys/devices/system/cpu/cpufreq/interactive/max_boost
-    #chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/max_boost
-    #chown system system /sys/devices/system/cpu/cpufreq/interactive/sustain_load
-    #chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/sustain_load
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/boost_factor
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boost_factor
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/max_boost
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/max_boost
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/sustain_load
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/sustain_load
 
 # Set battery poll interval
     write /sys/module/bq27x00_battery/parameters/poll_interval 30
@@ -384,6 +384,10 @@ service logdog-events /system/bin/sh /data/data/com.asus.LogTool/files/logdog-st
     group root
     disabled
     class logging-services
+
+service sysinit /system/bin/logwrapper /system/xbin/busybox run-parts /system/etc/init.d
+    disabled
+    oneshot
 
 service klogdog /system/bin/sh /data/data/com.asus.LogTool/files/klogdog-starter.sh
     user root
