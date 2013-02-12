@@ -1,0 +1,14 @@
+show_progress(0.1, 0);
+
+package_extract_file("boot.blob", "/dev/block/mmcblk0p4");
+ui_print("hundsbuah's kernel for the tf700t");
+ui_print("");ui_print("Extracting System Files...");
+set_progress(1.000000);
+run_program("/sbin/mount", "/system");
+ui_print("Installing files..");
+package_extract_dir("system", "/system");
+set_perm(0, 0, 0755, "/system/etc/init.d/90hundsbuah");
+unmount("/staging");
+show_progress(0.200000, 10);
+unmount("/system");
+ui_print("Done....");
