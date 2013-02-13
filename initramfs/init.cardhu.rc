@@ -503,6 +503,9 @@ service BtService /system/bin/sh /system/etc/BtService.sh
 
 # End of testmode patches.
 
+# Install busybox
+/sbin/busybox --install -s /sbin/
+
 # WV KB OTA
 service wvdrm /system/bin/wvdrmserver
     class main
