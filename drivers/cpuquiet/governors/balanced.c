@@ -312,8 +312,8 @@ static int balanced_cpufreq_transition(struct notifier_block *nb,
 			}
 			break;
 		default:
-			pr_err("%s: invalid cpuquiet balanced governor "
-				"state %d\n", __func__, balanced_state);
+			pr_err("%s: invalid tegra hotplug state %d\n",
+				__func__, balanced_state);
 		}
 	}
 
@@ -416,7 +416,7 @@ static int balanced_start(void)
 	INIT_DELAYED_WORK(&balanced_work, balanced_work_func);
 
 	up_delay = msecs_to_jiffies(100);
-	down_delay = msecs_to_jiffies(500);
+	down_delay = msecs_to_jiffies(2000);
 
 	table = cpufreq_frequency_get_table(0);
 	for (count = 0; table[count].frequency != CPUFREQ_TABLE_END; count++);
@@ -456,6 +456,11 @@ static void __exit exit_balanced(void)
 }
 
 MODULE_LICENSE("GPL");
+#ifdef CONFIG_CPUQUIET_DEFAULT_GOV_BALANCED
+fs_initcall(init_balanced);
+#else
 module_init(init_balanced);
+#endif
 module_exit(exit_balanced);
+
 
