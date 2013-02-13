@@ -95,14 +95,14 @@ static unsigned int up_min_freq;
  * to minimize wakeup issues.
  * Set sleep_max_freq=0 to disable this behavior.
  */
-#define DEFAULT_SLEEP_MAX_FREQ 384000
+#define DEFAULT_SLEEP_MAX_FREQ 0
 static unsigned int sleep_max_freq;
 
 /*
  * The frequency to set when waking up from sleep.
  * When sleep_max_freq=0 this will have no effect.
  */
-#define DEFAULT_SLEEP_WAKEUP_FREQ 998400
+#define DEFAULT_SLEEP_WAKEUP_FREQ 787200
 static unsigned int sleep_wakeup_freq;
 
 #define UP_THRESHOLD_FREQ 1800000
@@ -113,7 +113,7 @@ static unsigned int threshold_freq;
  * go below this frequency.
  * Set awake_min_freq=0 to disable this behavior.
  */
-#define DEFAULT_AWAKE_MIN_FREQ 122000
+#define DEFAULT_AWAKE_MIN_FREQ 122200
 static unsigned int awake_min_freq;
 
 static unsigned int suspendfreq = 400000;
@@ -348,7 +348,7 @@ static void cpufreq_brazilianwax_freq_change_time_work(struct work_struct *work)
 			if (new_freq > suspendfreq) new_freq = suspendfreq; 	
 			relation = CPUFREQ_RELATION_H;
 		  }
-		
+
                 } else if (cpu_load < min_cpu_load) {
 			if (cpu_load < rapid_min_cpu_load) {
 				new_freq = awake_min_freq;
@@ -822,4 +822,3 @@ module_exit(cpufreq_brazilianwax_exit);
 MODULE_AUTHOR ("Erasmux/imoseyon");
 MODULE_DESCRIPTION ("'cpufreq_brazilianwax' - A smart cpufreq governor optimized for the hero!");
 MODULE_LICENSE ("GPL");
-
