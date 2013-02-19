@@ -17,7 +17,7 @@ choice
 	  startup. If in doubt, select 'userspace'
 
 config CPUQUIET_DEFAULT_GOV_USERSPACE
-	bool "userspace"
+	bool "cpuq gov userspace"
 	select CPUQUIET_GOVERNOR_USERSPACE
 	help
 	  Use the CPUQuiet governor 'userspace' as default. This disables
@@ -25,13 +25,20 @@ config CPUQUIET_DEFAULT_GOV_USERSPACE
 	  over the number of cpus online in the system
 
 config CPUQUIET_DEFAULT_GOV_BALANCED
-	bool "balanced"
+	bool "cpuq gov balanced"
 	select CPUQUIET_GOVERNOR_BALANCED
 	depends on CPU_FREQ
 	help
 	  Use the CPUQuiet governor 'balanced' as default. This dynamically
 	  scales the number of cpus online in the system based on the cpu
 	  load
+
+config TEGRA_RUNNABLE_THREAD
+	bool "Tegra3 runnable thread hotplug"
+	depends on CPUQUIET_DEFAULT_GOV_BALANCED
+	default n
+	help
+	  Tegra3 Runnable Thread calculations for CPU hotplug
 endchoice
 
 endif
