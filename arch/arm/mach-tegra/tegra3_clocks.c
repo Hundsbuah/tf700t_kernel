@@ -3635,6 +3635,7 @@ static struct clk tegra_pll_u = {
 };
 
 static struct clk_pll_freq_table tegra_pll_x_freq_table[] = {
+        /* 1.9 GHz */
 	{ 12000000, 1900000000, 850,  6,  1, 8},
 	{ 13000000, 1900000000, 915,  7,  1, 8},	
 	{ 16800000, 1900000000, 708,  7,  1, 8},	

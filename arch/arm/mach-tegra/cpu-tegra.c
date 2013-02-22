@@ -51,7 +51,7 @@
 #define SYSTEM_NORMAL_MODE	(0)
 #define SYSTEM_BALANCE_MODE	(1)
 #define SYSTEM_PWRSAVE_MODE	(2)
-#define SYSTEM_OVERCLOCK_0P1G_MODE (4)
+#define SYSTEM_OVERCLOCK_0P1G_MODE (3)
 #define SYSTEM_MODE_END 		(SYSTEM_OVERCLOCK_0P1G_MODE + 1)
 #define SYSTEM_PWRSAVE_MODE_MAX_FREQ	(1000000)
 #define ASUS_OVERCLOCK
@@ -1067,8 +1067,8 @@ static struct notifier_block tegra_cpu_pm_notifier = {
 
 void rebuild_max_freq_table(max_rate)
 {
-	power_mode_table[SYSTEM_NORMAL_MODE] = max_rate;
-	power_mode_table[SYSTEM_BALANCE_MODE] = max_rate - 200000;
+	power_mode_table[SYSTEM_NORMAL_MODE] = 1500000;
+	power_mode_table[SYSTEM_BALANCE_MODE] = 1300000;
 	power_mode_table[SYSTEM_PWRSAVE_MODE] = SYSTEM_PWRSAVE_MODE_MAX_FREQ;
 	power_mode_table[SYSTEM_OVERCLOCK_0P1G_MODE] = 1900000;
 }
@@ -1121,7 +1121,7 @@ static int tegra_cpu_init(struct cpufreq_policy *policy)
 	target_cpu_speed[policy->cpu] = policy->cur;
 
 	/* FIXME: what's the actual transition time? */
-	policy->cpuinfo.transition_latency = 300 * 1000;
+	policy->cpuinfo.transition_latency = 40 * 1000;
 
 	policy->shared_type = CPUFREQ_SHARED_TYPE_ALL;
 	cpumask_copy(policy->related_cpus, cpu_possible_mask);
