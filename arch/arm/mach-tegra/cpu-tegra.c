@@ -59,7 +59,6 @@
 unsigned int power_mode_table[SYSTEM_MODE_END] = {1000000,1200000,1400000,1500000};
 
 #define CAMERA_ENABLE_EMC_MINMIAM_RATE (667000000)
-#define EMC_MINMIAM_RATE (204000000)
 /* tegra throttling and edp governors require frequencies in the table
    to be in ascending order */
 static struct cpufreq_frequency_table *freq_table;
@@ -271,7 +270,7 @@ static int system_mode_set(const char *arg, const struct kernel_param *kp)
 	if (ret == 0) {
 		printk("system_mode_set system_mode=%u\n",system_mode);
 #ifdef ASUS_OVERCLOCK
-		if( (system_mode < SYSTEM_NORMAL_MODE) || (system_mode > SYSTEM_OVERCLOCK_0P1G_MODE))
+		if( (system_mode<SYSTEM_NORMAL_MODE) || (system_mode>SYSTEM_OVERCLOCK_0P1G_MODE))
 			system_mode=SYSTEM_NORMAL_MODE;
 #else
 
@@ -352,9 +351,9 @@ module_param_cb(enable_pwr_save, &tegra_pwr_save_ops, &pwr_save, 0644);
 		new_speed = power_mode_table[SYSTEM_NORMAL_MODE];
 
 #ifdef ASUS_OVERCLOCK
-	else if(( system_mode == SYSTEM_OVERCLOCK_0P1G_MODE ) &&
-(requested_speed > power_mode_table[SYSTEM_OVERCLOCK_0P1G_MODE]))
-		new_speed = power_mode_table[SYSTEM_OVERCLOCK_0P1G_MODE];
+        else  if( (system_mode== SYSTEM_OVERCLOCK_0P1G_MODE ) && ( requested_speed > power_mode_table[SYSTEM_OVERCLOCK_0P1G_MODE] ))
+		new_speed=power_mode_table[SYSTEM_OVERCLOCK_0P1G_MODE] ;
+
 #endif
 
 	return new_speed;
@@ -950,7 +949,7 @@ int tegra_cpu_set_speed_cap(unsigned int *speed_cap)
        new_speed = ASUS_governor_speed(new_speed);
 	new_speed = tegra_throttle_governor_speed(new_speed);
 #ifdef ASUS_OVERCLOCK
-	if(system_mode == SYSTEM_OVERCLOCK_0P1G_MODE ) {
+	if(system_mode == SYSTEM_OVERCLOCK_0P1G_MODE) {
 		if(edp_enable) {
 			pr_info("%s : EDP enable\n", __func__);
 			new_speed = edp_governor_speed(new_speed);
@@ -1075,12 +1074,6 @@ void rebuild_max_freq_table(max_rate)
 
 static int tegra_cpu_init(struct cpufreq_policy *policy)
 {
-	struct clk *c=NULL;
-	unsigned long  cpu_emc_cur_rate = 0;
-	unsigned long  emc_cur_rate = 0;
-
-	c=tegra_get_clock_by_name("emc");
-
 	if (policy->cpu >= CONFIG_NR_CPUS)
 		return -EINVAL;
 
@@ -1092,24 +1085,6 @@ static int tegra_cpu_init(struct cpufreq_policy *policy)
 	if (IS_ERR(emc_clk)) {
 		clk_put(cpu_clk);
 		return PTR_ERR(emc_clk);
-	}
-
-	if(!camera_enable)
-	{
-		cpu_emc_cur_rate = clk_get_rate(emc_clk);
-		emc_cur_rate = clk_get_rate(c);
-		printk(" %s : emc_clk->min_rate to 204M\n", __func__);
-		emc_clk->min_rate=EMC_MINMIAM_RATE;
-		c->min_rate=EMC_MINMIAM_RATE;
-
-		if(cpu_emc_cur_rate < emc_clk->min_rate )
-		{
-			clk_set_rate(emc_clk, EMC_MINMIAM_RATE);
-		}
-		if(emc_cur_rate < c->min_rate )
-		{
-			clk_set_rate(c, EMC_MINMIAM_RATE);
-		}
 	}
 
 	clk_enable(emc_clk);
