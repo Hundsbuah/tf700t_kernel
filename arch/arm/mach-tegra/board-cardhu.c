@@ -84,6 +84,7 @@
 #include "pm.h"
 #include "baseband-xmm-power.h"
 #include "wdt-recovery.h"
+#include <mach/hundsbuah.h>
 
 static struct balanced_throttle throttle_list[] = {
 #ifdef CONFIG_TEGRA_THERMAL_THROTTLE
@@ -123,7 +124,7 @@ static struct balanced_throttle throttle_list[] = {
 /* All units are in millicelsius */
 static struct tegra_thermal_data thermal_data = {
 	.shutdown_device_id = THERMAL_DEVICE_ID_NCT_EXT,
-	.temp_shutdown = 90000,
+	.temp_shutdown = HUNDSBUAH_SHUTDOWN_TEMP,
 
 #if defined(CONFIG_TEGRA_EDP_LIMITS) || defined(CONFIG_TEGRA_THERMAL_THROTTLE)
 	.throttle_edp_device_id = THERMAL_DEVICE_ID_NCT_EXT,
@@ -133,7 +134,7 @@ static struct tegra_thermal_data thermal_data = {
 	.hysteresis_edp = 3000,
 #endif
 #ifdef CONFIG_TEGRA_THERMAL_THROTTLE
-	.temp_throttle = 85000,
+	.temp_throttle = HUNDSBUAH_THROTTLE_DOWN_TEMP,
 	.tc1 = 0,
 	.tc2 = 1,
 	.passive_delay = 2000,
