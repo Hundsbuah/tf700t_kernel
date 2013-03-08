@@ -485,8 +485,8 @@ static int __init actmon_dev_init(struct actmon_dev *dev)
 }
 
 /* EMC activity monitor: frequency sampling device:
- * activity counter is incremented every 256 memory transactions, and
- * each transaction takes 2 EMC clocks; count_weight = 512.
+ * activity counter is incremented every 128 memory transactions, and
+ * each transaction takes 2 EMC clocks; count_weight = 256.
  */
 static struct actmon_dev actmon_dev_emc = {
 	.reg	= 0x1c0,
@@ -500,13 +500,13 @@ static struct actmon_dev actmon_dev_emc = {
 	.boost_freq_step	= 16000,
 	.boost_up_coef		= 200,
 	.boost_down_coef	= 50,
-	.boost_up_threshold	= 60,
-	.boost_down_threshold	= 40,
+	.boost_up_threshold	= 5,   /* 60 old value */
+	.boost_down_threshold	= 2,   /* 40% old value */
 
 	.up_wmark_window	= 1,
 	.down_wmark_window	= 3,
 	.avg_window_log2	= ACTMON_DEFAULT_AVG_WINDOW_LOG2,
-	.count_weight		= 0x200,
+	.count_weight		= 0x100,
 
 	.type			= ACTMON_FREQ_SAMPLER,
 	.state			= ACTMON_UNINITIALIZED,
@@ -532,8 +532,8 @@ static struct actmon_dev actmon_dev_avp = {
 	.boost_freq_step	= 8000,
 	.boost_up_coef		= 200,
 	.boost_down_coef	= 50,
-	.boost_up_threshold	= 85,
-	.boost_down_threshold	= 50,
+	.boost_up_threshold	= 5,   /* 85% old value */
+	.boost_down_threshold	= 2,   /* 50% old value */
 
 	.up_wmark_window	= 1,
 	.down_wmark_window	= 3,

@@ -50,7 +50,8 @@ module_param(emc_enable, bool, 0644);
 u8 tegra_emc_bw_efficiency = 35;
 u8 tegra_emc_bw_efficiency_boost = 45;
 
-#define EMC_MIN_RATE_DDR3		25500000
+//#define EMC_MIN_RATE_DDR3		  25500000
+#define EMC_MIN_RATE_DDR3		   (102000000)
 #define EMC_STATUS_UPDATE_TIMEOUT	100
 #define TEGRA_EMC_TABLE_MAX_SIZE 	16
 
@@ -1188,7 +1189,7 @@ void tegra_emc_dram_type_init(struct clk *c)
 		     EMC_CFG5_TYPE_MASK) >> EMC_CFG5_TYPE_SHIFT;
 	if (dram_type == DRAM_TYPE_DDR3) {
 		if (tegra3_get_project_id()==0x4) {
-			emc->min_rate = 102000000;
+			emc->min_rate = EMC_MIN_RATE_DDR3; /* just to be sure */
 		}
 		else {
 			emc->min_rate = EMC_MIN_RATE_DDR3;
