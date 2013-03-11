@@ -65,16 +65,16 @@ static int cpu_below_core = VDD_CPU_BELOW_VDD_CORE;
 
 static struct dvfs_rail tegra3_dvfs_rail_vdd_cpu = {
 	.reg_id = "vdd_cpu",
-	.max_millivolts = HUNDSBUAH_MAX_CPU_VOLTAGE_CAP,
-	.min_millivolts = HUNDSBUAH_MIN_CPU_VOLTAGE_CAP,
+	.max_millivolts = HUNDSBUAH_MAX_CPU_VOLTAGE,
+	.min_millivolts = HUNDSBUAH_MIN_CPU_VOLTAGE,
 	.step = VDD_SAFE_STEP,
 	.jmp_to_zero = true,
 };
 
 static struct dvfs_rail tegra3_dvfs_rail_vdd_core = {
 	.reg_id = "vdd_core",
-	.max_millivolts = HUNDSBUAH_MAX_CORE_VOLTAGE_CAP,
-	.min_millivolts = HUNDSBUAH_MIN_CORE_VOLTAGE_CAP,
+	.max_millivolts = HUNDSBUAH_MAX_CORE_VOLTAGE,
+	.min_millivolts = HUNDSBUAH_MIN_CORE_VOLTAGE,
 	.step = VDD_SAFE_STEP,
 };
 
@@ -855,7 +855,7 @@ core_cap_level_store(struct kobject *kobj, struct kobj_attribute *attr,
 		{
 			printk("force vdd_core of P1801 as 1300mV !\n");
 		}
-		level = HUNDSBUAH_MAX_CORE_VOLTAGE_CAP;
+		level = HUNDSBUAH_MAX_CORE_VOLTAGE;
 	}
 	mutex_lock(&core_cap_lock);
 	user_core_cap.level = level;
