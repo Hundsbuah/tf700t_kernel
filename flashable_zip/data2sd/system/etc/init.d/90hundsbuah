@@ -89,9 +89,9 @@ echo 500 > /proc/sys/vm/dirty_expire_centisecs
 echo 1000 > /proc/sys/vm/dirty_writeback_centisecs
 
 #ZRAM
+echo 134217728 >  /sys/block/zram0/disksize
 /system/xbin/busybox mkswap /dev/block/zram0
 /system/xbin/busybox swapon /dev/block/zram0
-echo 134217728 >  /sys/block/zram0/disksize
 
 #Removes LOG
 rm /dev/log/main
