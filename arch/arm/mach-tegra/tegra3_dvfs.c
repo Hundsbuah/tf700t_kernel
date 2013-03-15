@@ -33,24 +33,24 @@
 
 #ifdef CONFIG_VOLTAGE_CONTROL
 int user_mv_table[MAX_DVFS_FREQS] = {
-        750, 775, 787, 800, 825, 837, 850, 862, 875, 887, 900, 912, 916, 925, 937, 950, 962, 975, 987, 1000, 1007, 1012, 1025, 1037, 1050, 1062, 1075, 1087, 1100, 1112, 1125, 1137, 1150, 1162, 1175, 1187, 1200, 1250, 1300, HUNDSBUAH_MAX_CPU_VOLTAGE};
+		637, 650, 662, 675, 700, 712, 725, 737, 750, 762, 775, 787, 800, 825, 837, 850, 862, 875, 887, 900,  912,  925,  937,  950,  975,  987,  1000, 1012, 1037, 1050, 1062, 1075, 1100, 1112, 1125, 1137, 1150, 1175, 1225, HUNDSBUAH_MAX_CPU_VOLTAGE };
 #endif
 
 #define CPU_MILLIVOLTS {\
-        750, 775, 787, 800, 825, 837, 850, 862, 875, 887, 900, 912, 916, 925, 937, 950, 962, 975, 987, 1000, 1007, 1012, 1025, 1037, 1050, 1062, 1075, 1087, 1100, 1112, 1125, 1137, 1150, 1162, 1175, 1187, 1200, 1250, 1300, HUNDSBUAH_MAX_CPU_VOLTAGE};
+		637, 650, 662, 675, 700, 712, 725, 737, 750, 762, 775, 787, 800, 825, 837, 850, 862, 875, 887, 900,  912,  925,  937,  950,  975,  987,  1000, 1012, 1037, 1050, 1062, 1075, 1100, 1112, 1125, 1137, 1150, 1175, 1225, HUNDSBUAH_MAX_CPU_VOLTAGE };
 
 static bool tegra_dvfs_cpu_disabled;
 static bool tegra_dvfs_core_disabled;
 static struct dvfs *cpu_dvfs;
 
-static int cpu_millivolts[MAX_DVFS_FREQS] = CPU_MILLIVOLTS;
+int cpu_millivolts[MAX_DVFS_FREQS] = CPU_MILLIVOLTS;
 
 static int cpu_millivolts_aged[MAX_DVFS_FREQS] = CPU_MILLIVOLTS;
 
 static const unsigned int cpu_cold_offs_mhz[MAX_DVFS_FREQS] = {
 	 50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50, 50};
 
-static int core_millivolts[MAX_DVFS_FREQS] = {
+int core_millivolts[MAX_DVFS_FREQS] = {
 	950, 1000, 1050, 1100, 1150, 1200, 1250, 1350, HUNDSBUAH_MAX_CORE_VOLTAGE};
 
 #define KHZ 1000
@@ -65,7 +65,7 @@ static int cpu_below_core = VDD_CPU_BELOW_VDD_CORE;
 
 static struct dvfs_rail tegra3_dvfs_rail_vdd_cpu = {
 	.reg_id = "vdd_cpu",
-	.max_millivolts = HUNDSBUAH_MAX_CPU_VOLTAGE,
+	.max_millivolts = HUNDSBUAH_CPU_VOLTAGE_CAP,
 	.min_millivolts = HUNDSBUAH_MIN_CPU_VOLTAGE,
 	.step = VDD_SAFE_STEP,
 	.jmp_to_zero = true,
@@ -73,7 +73,7 @@ static struct dvfs_rail tegra3_dvfs_rail_vdd_cpu = {
 
 static struct dvfs_rail tegra3_dvfs_rail_vdd_core = {
 	.reg_id = "vdd_core",
-	.max_millivolts = HUNDSBUAH_MAX_CORE_VOLTAGE,
+	.max_millivolts = HUNDSBUAH_CORE_VOLTAGE_CAP,
 	.min_millivolts = HUNDSBUAH_MIN_CORE_VOLTAGE,
 	.step = VDD_SAFE_STEP,
 };
@@ -86,21 +86,21 @@ static struct dvfs_rail *tegra3_dvfs_rails[] = {
 static int tegra3_get_core_floor_mv(int cpu_mv)
 {
 	if (cpu_mv < 800)
-		return  950;
+		return core_millivolts[0];
 	if (cpu_mv < 900)
-		return 1000;
+		return core_millivolts[1];
 	if (cpu_mv < 1000)
-		return 1100;
+		return core_millivolts[3];
 	if ((tegra_cpu_speedo_id() < 1) ||
  	    (tegra_cpu_speedo_id() == 4) ||
  	    (tegra_cpu_speedo_id() == 8))
-		return 1200;
+		return core_millivolts[5];
 	if (cpu_mv < 1100)
-		return 1200;
-	if (cpu_mv <= 1250)
-		return 1350;
-   if (cpu_mv <= HUNDSBUAH_MAX_CPU_VOLTAGE)
-		return HUNDSBUAH_MAX_CORE_VOLTAGE;
+		return core_millivolts[5];
+	if (cpu_mv <= 1225)
+		return core_millivolts[7];
+   if (cpu_mv > 1225 && cpu_mv < HUNDSBUAH_CPU_VOLTAGE_CAP)
+		return core_millivolts[HUNDSBUAH_CORE_MAXFREQ_IDX];
 	BUG();
 }
 
@@ -154,17 +154,9 @@ static struct dvfs_relationship tegra3_dvfs_relationships[] = {
 	}
 
 static struct dvfs cpu_dvfs_table[] = {
-	/* Cpu voltages (mV):	      750, 775, 787, 800, 825, 837, 850, 862, 875, 887, 900, 912,   916,  925,  937,  950,  962,  975,  987, 1000, 1007, 1012, 1025, 1037, 1050, 1062, 1075, 1087, 1100, 1112, 1125, 1137, 1150, 1162, 1175, 1187, 1200, 1250, 1300, HUNDSBUAH_MAX_CPU_VOLTAGE}; */
-	CPU_DVFS("cpu_g",  4, 0, MHZ,   1,   1,   1,   1, 460, 460, 460, 550, 550, 550, 550,  680,  680,  680,  680,  680,  680,  680,  820,  820,  970,  970,  970, 1040, 1040, 1080, 1080, 1150, 1150, 1200, 1200, 1240, 1240, 1280, 1280, 1320, 1320, 1360, 1360, 1500),
-	CPU_DVFS("cpu_g",  4, 1, MHZ,   1,   1,   1,   1, 480, 480, 480, 650, 650, 650, 650,  780,  780,  780,  780,  780,  780,  780,  990,  990, 1040, 1040, 1040, 1100, 1100, 1200, 1200, 1250, 1250, 1300, 1300, 1330, 1330, 1360, 1360, 1400, 1400, 1500),
-	CPU_DVFS("cpu_g",  4, 2, MHZ,   1,   1,   1,   1, 520, 520, 520, 700, 700, 700, 700,  860,  860,  860,  860,  860,  860,  860, 1050, 1050, 1150, 1150, 1150, 1200, 1200, 1280, 1280, 1300, 1300, 1340, 1340, 1380, 1380, 1500),
-	CPU_DVFS("cpu_g",  4, 3, MHZ,   1,   1,   1,   1, 550, 550, 550, 770, 770, 770, 770,  910,  910,  910,  910,  910,  910,  910, 1150, 1150, 1230, 1230, 1230, 1280, 1280, 1330, 1330, 1370, 1370, 1400, 1400, 1500),
-
-	CPU_DVFS("cpu_g",  5, 3, MHZ,   1,   1,   1, 550, 550, 550, 770, 770, 770, 770,  910,  910,  910,  910,  910,  910,  910, 1150, 1150, 1230, 1230, 1230, 1280, 1280, 1330, 1330, 1370, 1370, 1400, 1400, 1470, 1470, 1500, 1500, 1500, 1500, 1540, 1540, 1700, HUNDSBUAH_MAX_CPU_FREQUENCY),
-	CPU_DVFS("cpu_g",  5, 4, MHZ,   1,   1,   1, 550, 550, 550, 770, 770, 770, 770,  940,  940,  940,  940,  940,  940,  940, 1160, 1160, 1240, 1240, 1240, 1280, 1280, 1360, 1360, 1390, 1390, 1470, 1470, 1500, 1500, 1520, 1520, 1520, 1520, 1590, 1700, HUNDSBUAH_MAX_CPU_FREQUENCY),
-
-	CPU_DVFS("cpu_g",  6, 3, MHZ,   1,   1,   1,   1, 550, 550, 550, 770, 770, 770, 770,  910,  910,  910,  910,  910,  910,  910, 1150, 1150, 1230, 1230, 1230, 1280, 1280, 1330, 1330, 1370, 1370, 1400, 1400, 1470, 1470, 1500, 1500, 1500, 1500, 1540, 1540, 1700),
-	CPU_DVFS("cpu_g",  6, 4, MHZ,   1,   1,   1,   1, 550, 550, 550, 770, 770, 770, 770,  940,  940,  940,  940,  940,  940,  940, 1160, 1160, 1240, 1240, 1240, 1280, 1280, 1360, 1360, 1390, 1390, 1470, 1470, 1500, 1500, 1520, 1520, 1520, 1520, 1590, 1700),
+	/* Cpu voltages (mV):	      750,  775, 787, 800, 825, 837, 850, 862, 875, 887, 900, 912,  916,  925,  937,  950,    962,  975,  987, 1000, 1007, 1012, 1025, 1037, 1050, 1062, 1075, 1087, 1100, 1112, 1125, 1137, 1150, 1162, 1175, 1187, 1200, 1250, 1300, HUNDSBUAH_MAX_CPU_VOLTAGE}; */
+	CPU_DVFS("cpu_g",  5, 3, MHZ,   1,  475, 475, 475, 620, 620, 620, 620, 760, 760, 760, 760,  760,  910,  910,  1000,  1000, 1000, 1000, 1150, 1150, 1150, 1150, 1150, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1400, 1500, 1500, 1500, 1500, 1500, 1500, 1700, HUNDSBUAH_MAX_CPU_FREQUENCY),
+	CPU_DVFS("cpu_g",  5, 4, MHZ,   1,  475, 475, 475, 620, 620, 620, 620, 760, 760, 760, 760,  760,  910,  910,  1000,  1000, 1000, 1000, 1150, 1150, 1150, 1150, 1150, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1400, 1500, 1500, 1500, 1500, 1500, 1500, 1700, HUNDSBUAH_MAX_CPU_FREQUENCY),
 
 	CPU_DVFS("cpu_g", 12, 3, MHZ,   1,  475, 475, 475, 620, 620, 620, 620, 760, 760, 760, 760,  760,  910,  910,  1000,  1000, 1000, 1000, 1150, 1150, 1150, 1150, 1150, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1400, 1500, 1500, 1500, 1500, 1500, 1500, 1700, HUNDSBUAH_MAX_CPU_FREQUENCY),
 	CPU_DVFS("cpu_g", 12, 4, MHZ,   1,  475, 475, 475, 620, 620, 620, 620, 760, 760, 760, 760,  760,  910,  910,  1000,  1000, 1000, 1000, 1150, 1150, 1150, 1150, 1150, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1400, 1500, 1500, 1500, 1500, 1500, 1500, 1700, HUNDSBUAH_MAX_CPU_FREQUENCY),
@@ -177,17 +169,9 @@ static struct dvfs cpu_dvfs_table[] = {
 };
 
 static struct dvfs cpu_0_dvfs_table[] = {
-	/* Cpu voltages (mV):	      750, 775, 787, 800, 825, 837, 850, 862, 875,  887,  900,  912,  916,  925,  937,  950,  962,  975,  987, 1000, 1007, 1012, 1025, 1037, 1050, 1062, 1075, 1087, 1100, 1112, 1125, 1137, 1150, 1162, 1175, 1187, 1200, 1250, 1300, HUNDSBUAH_MAX_CPU_VOLTAGE}; */
-	CPU_DVFS("cpu_0",  4, 0, MHZ,   1,   1,   1, 475, 475, 475, 475, 640, 640,  640,  760,  760,  760,  760,  860,  860,  860,  860,  860, 1000, 1000, 1000, 1000, 1100, 1100, 1100, 1100, 1200, 1200, 1200, 1200, 1200, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1500),
-	CPU_DVFS("cpu_0",  4, 1, MHZ,   1, 475, 475, 475, 475, 640, 640, 640, 760,  760,  760,  860,  860,  860,  860,  860, 1000, 1000, 1000, 1100, 1100, 1100, 1100, 1100, 1200, 1200, 1200, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1400, 1400, 1400, 1500),
-	CPU_DVFS("cpu_0",  4, 2, MHZ, 475, 475, 475, 640, 640, 640, 760, 760, 760,  860,  860,  860, 1000, 1000, 1000, 1000, 1000, 1100, 1100, 1200, 1200, 1200, 1200, 1200, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1400, 1400, 1500),
-	CPU_DVFS("cpu_0",  4, 3, MHZ, 475, 475, 640, 640, 640, 760, 760, 860, 860,  860,  860, 1000, 1000, 1000, 1100, 1100, 1100, 1100, 1200, 1200, 1200, 1200, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1400, 1400, 1500),
-
-	CPU_DVFS("cpu_0",  5, 3, MHZ, 475, 620, 620, 620, 760, 760, 760, 910,  910,  910, 1000, 1000, 1000, 1000, 1000, 1000, 1150, 1150, 1150, 1150, 1150, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1400, 1500, 1500, 1500, 1500, 1500, 1600, 1600, 1600, 1600, 1700, HUNDSBUAH_MAX_CPU_FREQUENCY),
-	CPU_DVFS("cpu_0",  5, 4, MHZ, 475, 620, 620, 760, 760, 760, 910, 910, 1000, 1000, 1000, 1000, 1000, 1150, 1150, 1150, 1150, 1150, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1500, 1500, 1500, 1500, 1600, 1600, 1600, 1600, 1600, 1600, 1600, 1600, 1700, HUNDSBUAH_MAX_CPU_FREQUENCY),
-
-	CPU_DVFS("cpu_0",  6, 3, MHZ, 475, 475, 620, 620, 620, 760, 760, 760, 910,  910,  910, 1000, 1000, 1000, 1000, 1000, 1000, 1150, 1150, 1150, 1150, 1150, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1400, 1500, 1500, 1500, 1500, 1500, 1600, 1600, 1600, 1600, 1700),
-	CPU_DVFS("cpu_0",  6, 4, MHZ, 475, 620, 620, 620, 760, 760, 760, 910, 910, 1000, 1000, 1000, 1000, 1000, 1150, 1150, 1150, 1150, 1150, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1500, 1500, 1500, 1500, 1600, 1600, 1600, 1600, 1600, 1600, 1600, 1600, 1700),
+	/* Cpu voltages (mV):	      750, 775, 787, 800, 825, 837, 850, 862,  875,  887,  900,  912,  916,  925,  937,  950,  962,  975,  987, 1000, 1007, 1012, 1025, 1037, 1050, 1062, 1075, 1087, 1100, 1112, 1125, 1137, 1150, 1162, 1175, 1187, 1200, 1250, 1300, HUNDSBUAH_MAX_CPU_VOLTAGE}; */
+	CPU_DVFS("cpu_0",  5, 3, MHZ, 475, 475, 620, 620, 760, 760, 760, 910,  910,  910, 1000, 1000, 1000, 1000, 1000, 1000, 1150, 1150, 1150, 1150, 1150, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1400, 1500, 1500, 1500, 1500, 1500, 1600, 1600, 1600, 1600, 1700, HUNDSBUAH_MAX_CPU_FREQUENCY),
+	CPU_DVFS("cpu_0",  5, 4, MHZ, 475, 475, 620, 620, 760, 760, 760, 910,  910,  910, 1000, 1000, 1000, 1000, 1000, 1000, 1150, 1150, 1150, 1150, 1150, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1400, 1500, 1500, 1500, 1500, 1500, 1600, 1600, 1600, 1600, 1700, HUNDSBUAH_MAX_CPU_FREQUENCY),
 
 	CPU_DVFS("cpu_0", 12, 3, MHZ, 475, 475, 620, 620, 760, 760, 760, 910,  910,  910, 1000, 1000, 1000, 1000, 1000, 1000, 1150, 1150, 1150, 1150, 1150, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1400, 1500, 1500, 1500, 1500, 1500, 1600, 1600, 1600, 1600, 1700, HUNDSBUAH_MAX_CPU_FREQUENCY),
 	CPU_DVFS("cpu_0", 12, 4, MHZ, 475, 475, 620, 620, 760, 760, 760, 910,  910,  910, 1000, 1000, 1000, 1000, 1000, 1000, 1150, 1150, 1150, 1150, 1150, 1300, 1300, 1300, 1300, 1400, 1400, 1400, 1400, 1500, 1500, 1500, 1500, 1500, 1600, 1600, 1600, 1600, 1700, HUNDSBUAH_MAX_CPU_FREQUENCY),
@@ -517,6 +501,7 @@ static int __init get_cpu_nominal_mv_index(
 
 	*cpu_dvfs = d;
         pr_info("tegra3_dvfs: %s: cpu_nominal_mv_index: %i\n",__func__, i - 1);
+
 	return (i - 1);
 }
 
@@ -581,6 +566,59 @@ void tegra_dvfs_age_cpu(int cur_linear_age)
 			tegra_adjust_cpu_mvs(13);
 		}
 	}
+}
+
+/* after dvfs init is done fall back to minimal gpu oc speed
+ * the user can change the gpu speed later via the gpu oc interface
+ */
+static int __init hundsbuah_set_gpu_speed(void)
+{
+   unsigned int new_gpu_freq, volt, freq;
+	struct clk *vde = tegra_get_clock_by_name("vde");
+	struct clk *mpe = tegra_get_clock_by_name("mpe");
+	struct clk *two_d = tegra_get_clock_by_name("2d");
+	struct clk *epp = tegra_get_clock_by_name("epp");
+	struct clk *three_d = tegra_get_clock_by_name("3d");
+	struct clk *three_d2 = tegra_get_clock_by_name("3d2");
+	struct clk *se = tegra_get_clock_by_name("se");
+	struct clk *cbus = tegra_get_clock_by_name("cbus");
+	//struct clk *host1x = tegra_get_clock_by_name("host1x");
+	struct clk *pll_c = tegra_get_clock_by_name("pll_c");
+   freq = HUNDSBUAH_CORE_DEFAULT_OC_FREQUENCY;
+   volt = HUNDSBUAH_CORE_DEFAULT_OC_VOLT;
+
+   /* check */
+   if(volt > HUNDSBUAH_CORE_VOLTAGE_CAP || freq > HUNDSBUAH_CORE_FREQUENCY_CAP)
+      return -EINVAL;
+
+   new_gpu_freq = freq*1000000;
+
+	vde->max_rate = new_gpu_freq;
+	mpe->max_rate = new_gpu_freq;
+	two_d->max_rate = new_gpu_freq;
+	epp->max_rate = new_gpu_freq;
+	three_d->max_rate = new_gpu_freq;
+	three_d2->max_rate = new_gpu_freq;
+	se->max_rate = new_gpu_freq;
+	//host1x->max_rate = DIV_ROUND_UP((new_gpu_freq),2);
+	cbus->max_rate = new_gpu_freq;
+	pll_c->max_rate = (new_gpu_freq*2);
+	pr_info("NEW PLL_C MAX_RATE: %lu\n", pll_c->max_rate);
+
+
+   vde->dvfs->millivolts[HUNDSBUAH_CORE_MAXFREQ_IDX] = volt;
+   vde->dvfs->freqs[HUNDSBUAH_CORE_MAXFREQ_IDX] = new_gpu_freq;
+   mpe->dvfs->freqs[HUNDSBUAH_CORE_MAXFREQ_IDX] = new_gpu_freq;
+   two_d->dvfs->freqs[HUNDSBUAH_CORE_MAXFREQ_IDX] = new_gpu_freq;
+   epp->dvfs->freqs[HUNDSBUAH_CORE_MAXFREQ_IDX] = new_gpu_freq;
+   three_d->dvfs->freqs[HUNDSBUAH_CORE_MAXFREQ_IDX] = new_gpu_freq;
+   three_d2->dvfs->freqs[HUNDSBUAH_CORE_MAXFREQ_IDX] = new_gpu_freq;
+   se->dvfs->freqs[HUNDSBUAH_CORE_MAXFREQ_IDX] = new_gpu_freq;
+   cbus->dvfs->freqs[HUNDSBUAH_CORE_MAXFREQ_IDX] = new_gpu_freq;
+   pll_c->dvfs->freqs[HUNDSBUAH_CORE_MAXFREQ_IDX] = (new_gpu_freq*2);
+   pr_info("NEW PLL_C FREQS: %lu\n", pll_c->dvfs->freqs[HUNDSBUAH_CORE_MAXFREQ_IDX]);
+
+   return 0;
 }
 
 void __init tegra_soc_init_dvfs(void)
@@ -655,6 +693,9 @@ void __init tegra_soc_init_dvfs(void)
 	pr_info("tegra dvfs: VDD_CORE nominal %dmV, scaling %s\n",
 		tegra3_dvfs_rail_vdd_core.nominal_millivolts,
 		tegra_dvfs_core_disabled ? "disabled" : "enabled");
+
+	//if(hundsbuah_set_gpu_speed(HUNDSBUAH_CORE_DEFAULT_OC_FREQUENCY, HUNDSBUAH_CORE_DEFAULT_OC_VOLT))
+	  // 	pr_info("hundsbuah_set_gpu_speed failed to set default gpu oc values\n");
 }
 
 int tegra_cpu_dvfs_alter(int edp_thermal_index, const cpumask_t *cpus,
@@ -1053,3 +1094,4 @@ static int __init tegra_dvfs_init_core_cap(void)
 	return 0;
 }
 late_initcall(tegra_dvfs_init_core_cap);
+late_initcall(hundsbuah_set_gpu_speed);
