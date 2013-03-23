@@ -3742,6 +3742,13 @@ static struct clk_pll_freq_table tegra_pll_x_freq_table[] = {
 	{ 19200000, 1800000000, 885,  10, 1, 8},
 	{ 26000000, 1800000000, 900,  13, 1, 8},
    
+	/* 1.75 GHz */
+	{ 12000000, 1750000000, 850,  6,  1, 8},
+	{ 13000000, 1750000000, 915,  7,  1, 8},	/* actual: 1699.2 MHz */
+	{ 16800000, 1750000000, 708,  7,  1, 8},	/* actual: 1699.2 MHz */
+	{ 19200000, 1750000000, 885,  10, 1, 8},	/* actual: 1699.2 MHz */
+	{ 26000000, 1750000000, 875,  13, 1, 8},
+
 	/* 1.7 GHz */
 	{ 12000000, 1700000000, 850,  6,  1, 8},
 	{ 13000000, 1700000000, 915,  7,  1, 8},	/* actual: 1699.2 MHz */
@@ -4923,7 +4930,7 @@ static struct cpufreq_frequency_table freq_table_1p5GHz[] = {
 	{14, CPUFREQ_TABLE_END },
 };
 
-static struct cpufreq_frequency_table freq_table_1p7GHz[] = {
+static struct cpufreq_frequency_table freq_table_1p75GHz[] = {
 	{ 0,   51000 },
 	{ 1,  102000 },
 	{ 2,  204000 },
@@ -4938,45 +4945,7 @@ static struct cpufreq_frequency_table freq_table_1p7GHz[] = {
 	{11, 1400000 },
 	{12, 1500000 },
 	{13, 1600000 },
-	{14, 1700000 },
-	{15, CPUFREQ_TABLE_END },
-};
-
-static struct cpufreq_frequency_table freq_table_1p8GHz[] = {
-	{ 0,   51000 },
-	{ 1,  102000 },
-	{ 2,  204000 },
-	{ 3,  370000 },
-	{ 4,  475000 },
-	{ 5,  620000 },
-	{ 6,  760000 },
-	{ 7,  910000 },
-	{ 8, 1150000 },
-	{ 9, 1300000 },
-	{10, 1400000 },
-	{11, 1500000 },
-	{12, 1600000 },
-	{13, 1700000 },
-	{14, 1800000 },
-	{15, CPUFREQ_TABLE_END },
-};
-
-static struct cpufreq_frequency_table freq_table_1p85GHz[] = {
-	{ 0,   51000 },
-	{ 1,  102000 },
-	{ 2,  204000 },
-	{ 3,  370000 },
-	{ 4,  475000 },
-	{ 5,  620000 },
-	{ 6,  760000 },
-	{ 7,  910000 },
-	{ 8, 1150000 },
-	{ 9, 1300000 },
-	{10, 1400000 },
-	{11, 1500000 },
-	{12, 1600000 },
-	{13, 1700000 },
-	{14, 1850000 },
+	{14, 1750000 },
 	{15, CPUFREQ_TABLE_END },
 };
 
@@ -4994,46 +4963,8 @@ static struct cpufreq_frequency_table freq_table_1p9GHz[] = {
 	{10, 1400000 },
 	{11, 1500000 },
 	{12, 1600000 },
-	{13, 1700000 },
+	{13, 1750000 },
 	{14, 1900000 },
-	{15, CPUFREQ_TABLE_END },
-};
-
-static struct cpufreq_frequency_table freq_table_1p95GHz[] = {
-	{ 0,   51000 },
-	{ 1,  102000 },
-	{ 2,  204000 },
-	{ 3,  370000 },
-	{ 4,  475000 },
-	{ 5,  620000 },
-	{ 6,  760000 },
-	{ 7,  910000 },
-	{ 8, 1150000 },
-	{ 9, 1300000 },
-	{10, 1400000 },
-	{11, 1500000 },
-	{12, 1600000 },
-	{13, 1700000 },
-	{14, 1950000 },
-	{15, CPUFREQ_TABLE_END },
-};
-
-static struct cpufreq_frequency_table freq_table_2p0GHz[] = {
-	{ 0,   51000 },
-	{ 1,  102000 },
-	{ 2,  204000 },
-	{ 3,  370000 },
-	{ 4,  475000 },
-	{ 5,  620000 },
-	{ 6,  760000 },
-	{ 7,  910000 },
-	{ 8, 1150000 },
-	{ 9, 1300000 },
-	{10, 1400000 },
-	{11, 1500000 },
-	{12, 1600000 },
-	{13, 1700000 },
-	{14, 2000000 },
 	{15, CPUFREQ_TABLE_END },
 };
 
@@ -5043,12 +4974,8 @@ static struct tegra_cpufreq_table_data cpufreq_tables[] = {
 	{ freq_table_1p3GHz, 2, 10 },
 	{ freq_table_1p4GHz, 2, 11 },
 	{ freq_table_1p5GHz, 2, 12 },
-	{ freq_table_1p7GHz, 2, 12 },
-	{ freq_table_1p8GHz, 2, 12 },
-	{ freq_table_1p85GHz, 2, 12 },
- 	{ freq_table_1p9GHz, 2, 12 },
-	{ freq_table_1p95GHz, 2, 12 },
-	{ freq_table_2p0GHz, 2, 12 },
+	{ freq_table_1p75GHz, 2, 12 },
+	{ freq_table_1p9GHz, 2, 12 },
 };
 
 static int clip_cpu_rate_limits(

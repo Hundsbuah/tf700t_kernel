@@ -861,9 +861,9 @@ static ssize_t show_gpu_oc_volt(struct cpufreq_policy *policy, char *buf)
 static ssize_t store_gpu_oc_volt(struct cpufreq_policy *policy, const char *buf, size_t count) {
     int ret;
     unsigned int new_volt;
-    
-    new_volt = 0;
     struct clk *three_d = tegra_get_clock_by_name("3d");
+
+    new_volt = 0;
     ret = sscanf(buf, "%d", &new_volt);
     
     if (ret == 0)

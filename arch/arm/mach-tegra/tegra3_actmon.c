@@ -500,8 +500,8 @@ static struct actmon_dev actmon_dev_emc = {
 	.boost_freq_step	= 16000,
 	.boost_up_coef		= 200,
 	.boost_down_coef	= 50,
-	.boost_up_threshold	= 5,   /* 60 old value */
-	.boost_down_threshold	= 2,   /* 40% old value */
+	.boost_up_threshold	= 30,   /* 60 old value */
+	.boost_down_threshold	= 20,   /* 40% old value */
 
 	.up_wmark_window	= 1,
 	.down_wmark_window	= 3,
@@ -532,8 +532,8 @@ static struct actmon_dev actmon_dev_avp = {
 	.boost_freq_step	= 8000,
 	.boost_up_coef		= 200,
 	.boost_down_coef	= 50,
-	.boost_up_threshold	= 5,   /* 85% old value */
-	.boost_down_threshold	= 2,   /* 50% old value */
+	.boost_up_threshold	= 40,   /* 85% old value */
+	.boost_down_threshold	= 25,   /* 50% old value */
 
 	.up_wmark_window	= 1,
 	.down_wmark_window	= 3,
