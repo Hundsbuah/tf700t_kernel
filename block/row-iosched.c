@@ -39,10 +39,10 @@
 enum row_queue_prio {
 	ROWQ_PRIO_HIGH_READ = 0,
 	ROWQ_PRIO_REG_READ,
+	ROWQ_PRIO_LOW_READ,
 	ROWQ_PRIO_HIGH_SWRITE,
 	ROWQ_PRIO_REG_SWRITE,
 	ROWQ_PRIO_REG_WRITE,
-	ROWQ_PRIO_LOW_READ,
 	ROWQ_PRIO_LOW_SWRITE,
 	ROWQ_MAX_PRIO,
 };
@@ -51,10 +51,10 @@ enum row_queue_prio {
 static const bool queue_idling_enabled[] = {
 	true,	/* ROWQ_PRIO_HIGH_READ */
 	true,	/* ROWQ_PRIO_REG_READ */
+	true,	/* ROWQ_PRIO_LOW_READ */
 	false,	/* ROWQ_PRIO_HIGH_SWRITE */
 	false,	/* ROWQ_PRIO_REG_SWRITE */
 	false,	/* ROWQ_PRIO_REG_WRITE */
-	false,	/* ROWQ_PRIO_LOW_READ */
 	false,	/* ROWQ_PRIO_LOW_SWRITE */
 };
 
@@ -62,10 +62,10 @@ static const bool queue_idling_enabled[] = {
 static const bool urgent_queues[] = {
 	true,	/* ROWQ_PRIO_HIGH_READ */
 	true,	/* ROWQ_PRIO_REG_READ */
+	true,	/* ROWQ_PRIO_LOW_READ */
 	false,	/* ROWQ_PRIO_HIGH_SWRITE */
 	false,	/* ROWQ_PRIO_REG_SWRITE */
 	false,	/* ROWQ_PRIO_REG_WRITE */
-	false,	/* ROWQ_PRIO_LOW_READ */
 	false,	/* ROWQ_PRIO_LOW_SWRITE */
 };
 
@@ -73,16 +73,16 @@ static const bool urgent_queues[] = {
 static const int queue_quantum[] = {
 	100,	/* ROWQ_PRIO_HIGH_READ */
 	100,	/* ROWQ_PRIO_REG_READ */
+	100,	/* ROWQ_PRIO_LOW_READ */
 	2,	/* ROWQ_PRIO_HIGH_SWRITE */
 	1,	/* ROWQ_PRIO_REG_SWRITE */
 	1,	/* ROWQ_PRIO_REG_WRITE */
-	1,	/* ROWQ_PRIO_LOW_READ */
 	1	/* ROWQ_PRIO_LOW_SWRITE */
 };
 
 /* Default values for idling on read queues */
-#define ROW_IDLE_TIME_MSEC 5	/* msec */
-#define ROW_READ_FREQ_MSEC 20	/* msec */
+#define ROW_IDLE_TIME_MSEC 100	/* msec */
+#define ROW_READ_FREQ_MSEC 400	/* msec */
 
 /**
  * struct rowq_idling_data -  parameters for idling on the queue
