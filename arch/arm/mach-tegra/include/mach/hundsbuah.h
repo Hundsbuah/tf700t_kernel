@@ -11,12 +11,12 @@
 /*****************************/
 
 /* cap voltages */
-#define HUNDSBUAH_CPU_VOLTAGE_CAP         (1405)   /* mV */
+#define HUNDSBUAH_CPU_VOLTAGE_CAP         (1410)   /* mV */
 #define HUNDSBUAH_CORE_VOLTAGE_CAP        (1455)   /* mV */
 
 /* max and min voltages */
 #define HUNDSBUAH_MIN_CPU_VOLTAGE         (600)    /* mV */
-#define HUNDSBUAH_MAX_CPU_VOLTAGE         (1400)   /* mV */
+#define HUNDSBUAH_MAX_CPU_VOLTAGE         (1405)   /* mV */
 
 #define HUNDSBUAH_MIN_CORE_VOLTAGE        (850)    /* mV */
 #define HUNDSBUAH_MAX_CORE_VOLTAGE        (1450)   /* mV */
@@ -41,7 +41,7 @@
 
 #define HUNDSBUAH_SYSTEM_NORMAL_MODE_FREQUENCY     (HUNDSBUAH_MAX_CPU_FREQUENCY)    /* MHz */
 #define HUNDSBUAH_SYSTEM_BALANCE_MODE_FREQUENCY    (1000)    /* MHz */
-#define HUNDSBUAH_SYSTEM_PWRSAVE_MODE_FREQUENCY    (768)    /* MHz */
+#define HUNDSBUAH_SYSTEM_PWRSAVE_MODE_FREQUENCY    (760)    /* MHz */
 
 
 /* This is the table index for the max/oc/last gpu
@@ -53,7 +53,7 @@
  */
 #define HUNDSBUAH_CPU_MAXFREQ_IDX   (39)
 /* Default gpu oc values after init is done */
-#define HUNDSBUAH_CORE_DEFAULT_OC_FREQUENCY  (675)    /* MHz */
+#define HUNDSBUAH_CORE_DEFAULT_OC_FREQUENCY  (700)    /* MHz */
 #define HUNDSBUAH_CORE_DEFAULT_OC_VOLT       (1350)   /* mV */
 
 /*****************************/
