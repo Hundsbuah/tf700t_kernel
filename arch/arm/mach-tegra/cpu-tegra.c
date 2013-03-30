@@ -34,6 +34,7 @@
 #include <linux/debugfs.h>
 #include <linux/cpu.h>
 #include <mach/board-cardhu-misc.h>
+#include <mach/hundsbuah.h>
 
 #include <asm/system.h>
 
@@ -53,8 +54,7 @@
 #define SYSTEM_PWRSAVE_MODE	(2)
 #define SYSTEM_OVERCLOCK_0P1G_MODE (3)
 #define SYSTEM_MODE_END 		(SYSTEM_OVERCLOCK_0P1G_MODE + 1)
-#define SYSTEM_PWRSAVE_MODE_MAX_FREQ	(1000000)
-#define ASUS_OVERCLOCK
+//#define ASUS_OVERCLOCK
 
 unsigned int power_mode_table[SYSTEM_MODE_END] = {1000000,1200000,1400000,1500000};
 
@@ -296,7 +296,7 @@ module_param_cb(system_mode, &system_mode_ops, &system_mode, 0644);
 
 
 static unsigned int pwr_save=0;
-static unsigned int pwr_save_freq=1000000;
+static unsigned int pwr_save_freq=HUNDSBUAH_SYSTEM_PWRSAVE_MODE_FREQUENCY * 1000;
 static int pwr_save_freq_set(const char *arg, const struct kernel_param *kp)
 {
 	int ret = 0;
@@ -1066,10 +1066,10 @@ static struct notifier_block tegra_cpu_pm_notifier = {
 
 void rebuild_max_freq_table(max_rate)
 {
-	power_mode_table[SYSTEM_NORMAL_MODE] = 1900000;
-	power_mode_table[SYSTEM_BALANCE_MODE] = 1300000;
-	power_mode_table[SYSTEM_PWRSAVE_MODE] = SYSTEM_PWRSAVE_MODE_MAX_FREQ;
-	power_mode_table[SYSTEM_OVERCLOCK_0P1G_MODE] = 1900000;
+	power_mode_table[SYSTEM_NORMAL_MODE] = HUNDSBUAH_SYSTEM_NORMAL_MODE_FREQUENCY * 1000;
+	power_mode_table[SYSTEM_BALANCE_MODE] = HUNDSBUAH_SYSTEM_BALANCE_MODE_FREQUENCY * 1000;
+	power_mode_table[SYSTEM_PWRSAVE_MODE] = HUNDSBUAH_SYSTEM_PWRSAVE_MODE_FREQUENCY * 1000;
+	power_mode_table[SYSTEM_OVERCLOCK_0P1G_MODE] = HUNDSBUAH_SYSTEM_NORMAL_MODE_FREQUENCY * 1000;
 }
 
 static int tegra_cpu_init(struct cpufreq_policy *policy)
