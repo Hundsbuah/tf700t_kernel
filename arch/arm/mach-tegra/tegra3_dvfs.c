@@ -40,7 +40,7 @@ int user_mv_table[MAX_DVFS_FREQS] = {
 		762, 780, 805, 825, 875, 925, 950,  1000, 1050, 1100, 1150, 1175, 1237, 1270, 1300, 1330, HUNDSBUAH_MAX_CPU_VOLTAGE  };
 
 static const unsigned int cpu_cold_offs_mhz[MAX_DVFS_FREQS] = {
-	   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50, 50 };
+		50, 50, 50, 50, 50, 50, 50,  50, 50, 50, 50, 50, 50, 50, 50, 50, 50 };
     
 static bool tegra_dvfs_cpu_disabled;
 static bool tegra_dvfs_core_disabled;
