@@ -1,0 +1,8 @@
+#!/system/bin/sh
+
+# During boot it is needed to cap the frequency to a specific limit (HUNDSBUAH_CPU_BOOT_FREQUENCY) (1700MHz atm) until
+# echo 1 > /sys/module/cpu_tegra/parameters/boot_finished is set.
+# Call it to activate the oc frequencys.
+# This is needed for some devices (that cant handle 1900MHz frequencys i.e) to be able to boot
+# without a freeze when the frequency is too high
+echo 1 > /sys/module/cpu_tegra/parameters/boot_finished

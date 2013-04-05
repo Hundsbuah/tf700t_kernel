@@ -93,6 +93,7 @@ echo 134217728 >  /sys/block/zram0/disksize
 /system/xbin/busybox mkswap /dev/block/zram0
 /system/xbin/busybox swapon /dev/block/zram0
 
+
 #Removes LOG
 rm /dev/log/main
 

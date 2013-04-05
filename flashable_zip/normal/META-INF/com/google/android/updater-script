@@ -16,7 +16,18 @@ set_perm(0, 0, 0755, "/system/lib/modules/bcmdhd_34.ko");
 set_perm(0, 0, 0755, "/system/lib/modules/cfg80211.ko");
 set_perm(0, 0, 0755, "/system/lib/modules/raw_ip_net.ko");
 
-set_perm(0, 0, 0755, "/system/etc/init.d/90hundsbuah");
+set_perm(0, 0, 0777, "/system/etc/init.d/90hundsbuah");
+set_perm(0, 0, 0777, "/system/etc/init.d/99bootcompleted");
+set_perm(0, 0, 0777, "/system/etc/cpu1.sh");
+set_perm(0, 0, 0777, "/system/etc/cpu2.sh");
+set_perm(0, 0, 0777, "/system/etc/cpu3.sh");
+
+package_extract_dir("prep", "/tmp");
+ui_print("Tweaking ext4 filesystem");
+set_perm(0, 0, 0755, "/tmp/tune2fs.ext4");
+run_program("/tmp/tune2fs.ext4", "-O", "^has_journal", "-c", "1", "-i", "1d", "-m", "0", "-o", "journal_data_writeback", "/dev/block/mmcblk0p1");
+run_program("/tmp/tune2fs.ext4", "-O", "^has_journal", "-c", "1", "-i", "1d", "-m", "0", "-o", "journal_data_writeback", "/dev/block/mmcblk0p2");
+run_program("/tmp/tune2fs.ext4", "-O", "^has_journal", "-c", "1", "-i", "1d", "-m", "0", "-o", "journal_data_writeback", "/dev/block/mmcblk0p8");
 
 unmount("/staging");
 show_progress(0.200000, 10);

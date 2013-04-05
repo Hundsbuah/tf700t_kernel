@@ -266,12 +266,12 @@ static char __initdata tegra_edp_map[] = {
     * coreX_speedcap for lowest temp zone is -50mhz because of coldzone values
     */
    /*               speedo_id,      regulator_id,     temperatur_zone,  core0_speedcap,   core1_speedcap,   core2_speedcap,   core3_speedcap */
-   /* 23�C */       0x0c,	         0x52,	            0x17,	            0xb9,	            0xb9,	            0xaa,	            0xaa,
-   /* 45�C */       0x0c,	         0x52,	            0x2d,	            0xbe,	            0xbe,	            0xaf,	            0xaf,
-   /* 60�C */       0x0c,	         0x52,	            0x3c,	            0xbe,	            0xbe,	            0xaf,	            0xaf,
-   /* 70�C */       0x0c,	         0x52,	            0x46,	            0xbe,	            0xbe,	            0xaf,	            0xaf,
-   /* 75�C */       0x0c,	         0x52,	            0x4b,	            0x8c,	            0x82,	            0x82,	            0x82,	
-   /* 85�C */       0x0c,    	      0x52,	            0x55,	            0x8c,	            0x82,	            0x82,	            0x82,
+   /* 23C */       0x0c,	         0x52,	            0x17,	            0xb9,	            0xb9,	            0xb9,	            0xb9,
+   /* 45C */       0x0c,	         0x52,	            0x2d,	            0xbe,	            0xbe,	            0xbe,	            0xbe,
+   /* 60C */       0x0c,	         0x52,	            0x3c,	            0xbe,	            0xbe,	            0xbe,	            0xbe,
+   /* 70C */       0x0c,	         0x52,	            0x46,	            0xbe,	            0xbe,	            0xbe,	            0xbe,
+   /* 75C */       0x0c,	         0x52,	            0x4b,	            0x82,	            0x82,	            0x82,	            0x82,	
+   /* 85C */       0x0c,    	      0x52,	            0x55,	            0x64,	            0x64,	            0x64,	            0x64,
 	/* Here ends our regulator */
    0x0c,	0x42,	0x17,	0xa5,	0x9b,	0x9b,	0x91,	
    0x0c,	0x42,	0x2d,	0xaa,	0xa0,	0xa0,	0x96,	

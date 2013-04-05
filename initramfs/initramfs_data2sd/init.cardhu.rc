@@ -92,6 +92,7 @@ on boot
 # NTFS and exFAT driver
     insmod /sbin/tntfs.ko
     insmod /sbin/texfat.ko
+    insmod /system/lib/modules/frandom.ko
 
 # Sensor
     chown system system /sys/bus/iio/devices/device0/als_ir_mode

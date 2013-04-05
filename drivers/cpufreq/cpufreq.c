@@ -607,84 +607,6 @@ static ssize_t show_bios_limit(struct cpufreq_policy *policy, char *buf)
 
 extern int user_mv_table[MAX_DVFS_FREQS];
 
-static ssize_t show_cpu_cap(struct cpufreq_policy *policy, char *buf)
-{
-   char *c = buf;
-   
-	struct clk *cpu_clk_g = tegra_get_clock_by_name("cpu_g");
-
-	return (sprintf(c, "%lu\n", cpu_clk_g->dvfs->freqs[39]/1000000));
-}
-
-static ssize_t store_cpu_cap(struct cpufreq_policy *policy, char *buf, size_t count)
-{
-	unsigned long cpu_freq_cap;
-   unsigned int new_volt;
-	int ret;
-
-	struct clk *cpu_clk_g = tegra_get_clock_by_name("cpu_g");
-	struct clk *cpu_clk_0 = tegra_get_clock_by_name("cpu_0");
-
-   cpu_freq_cap = 0;
-   new_volt = 0;
-   ret = sscanf(buf, "%lu", &cpu_freq_cap);
-   
-   if (ret != 1)
-      return -EINVAL;
-   
-   if(cpu_freq_cap == 0)
-      return -EINVAL;
-   
-   if(cpu_freq_cap < 1800 || cpu_freq_cap > 2000)
-      return -EINVAL;
-
-   rcu_read_lock();   
-
-   switch(cpu_freq_cap)
-   {
-        case 1800:
-        {
-             new_volt = 1350;
-             cpu_clk_g->dvfs->millivolts[39] = new_volt;
-             pr_info("NEW CPU VOLTAGES == 1800: %d\n", cpu_clk_g->dvfs->millivolts[39]);
-        }
-        case 1850:
-        {
-            new_volt = 1375;
-            cpu_clk_g->dvfs->millivolts[39] = new_volt;
-            pr_info("NEW CPU VOLTAGES == 1850: %d\n", cpu_clk_g->dvfs->millivolts[39]);
-        }
-        case 1900:
-        {
-            new_volt = 1400;
-            cpu_clk_g->dvfs->millivolts[39] = new_volt;
-            pr_info("NEW CPU VOLTAGES == 1900: %d\n", cpu_clk_g->dvfs->millivolts[39]);
-        }
-        case 1950:
-        {
-            new_volt = 1425;
-            cpu_clk_g->dvfs->millivolts[39] = new_volt;
-            pr_info("NEW CPU VOLTAGES == 1950: %d\n", cpu_clk_g->dvfs->millivolts[39]);
-        }
-        case 2000:
-        {
-            new_volt = 1450;
-            cpu_clk_g->dvfs->millivolts[39] = new_volt;
-            pr_info("NEW CPU VOLTAGES == 2000: %d\n", cpu_clk_g->dvfs->millivolts[39]);
-        }
-   }
-   
-   cpu_clk_g->max_rate = cpu_freq_cap * 1000000;
-   cpu_clk_g->dvfs->freqs[39] = cpu_freq_cap * 1000000;
-   cpu_clk_0->max_rate = cpu_freq_cap * 1000000;
-   cpu_clk_0->dvfs->freqs[39] = cpu_freq_cap * 1000000;
-   pr_info("NEW CPU FREQ CAP: %lu\n", cpu_clk_g->dvfs->freqs[39]);
-
-   rcu_read_unlock();
-
-	return count;
-}
-
 static ssize_t show_UV_mV_table(struct cpufreq_policy *policy, char *buf)
 {
 	int i = 0;
@@ -736,7 +658,9 @@ static ssize_t store_UV_mV_table(struct cpufreq_policy *policy, char *buf, size_
 
 	return count;
 }
-
+/* Disabled because frequency limiting is now done with cpuX.sh files or via
+   terminal emulator and other interfaces provided by nvidia */
+#if 0
 static ssize_t show_gpu_oc(struct cpufreq_policy *policy, char *buf)
 {
 	char *c = buf;
@@ -881,7 +805,7 @@ static ssize_t store_gpu_oc_volt(struct cpufreq_policy *policy, const char *buf,
 
     return count;
 }
-
+#endif
 #endif
 
 
@@ -903,10 +827,10 @@ cpufreq_freq_attr_ro(policy_min_freq);
 cpufreq_freq_attr_ro(policy_max_freq);
 cpufreq_freq_attr_rw(dvfs_test);
 #ifdef CONFIG_VOLTAGE_CONTROL
-cpufreq_freq_attr_rw(cpu_cap);
+//cpufreq_freq_attr_rw(cpu_cap);
 cpufreq_freq_attr_rw(UV_mV_table);
-cpufreq_freq_attr_rw(gpu_oc);
-cpufreq_freq_attr_rw(gpu_oc_volt);
+//cpufreq_freq_attr_rw(gpu_oc);
+//cpufreq_freq_attr_rw(gpu_oc_volt);
 #endif
 
 
@@ -926,10 +850,10 @@ static struct attribute *default_attrs[] = {
 	&policy_max_freq.attr,
 	&dvfs_test.attr,
 #ifdef CONFIG_VOLTAGE_CONTROL
-	&cpu_cap.attr,
+//   &cpu_cap.attr,
  	&UV_mV_table.attr,
-        &gpu_oc.attr,
-        &gpu_oc_volt.attr,
+//   &gpu_oc.attr,
+//   &gpu_oc_volt.attr,
 #endif
 	NULL
 };
