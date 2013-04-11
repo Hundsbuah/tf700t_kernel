@@ -55,7 +55,6 @@
 unsigned int power_mode_table[SYSTEM_MODE_END] = {1000000,1200000,1400000};
 
 #define CAMERA_ENABLE_EMC_MINMIAM_RATE (667000000)
-#define EMC_MINMIAM_RATE (450000000)
 /* tegra throttling and edp governors require frequencies in the table
    to be in ascending order */
 static struct cpufreq_frequency_table *freq_table;
@@ -79,7 +78,6 @@ static unsigned long camera_enable_emc_mini_rate = 0;
 int Asus_camera_enable_set_emc_rate(unsigned long rate)
 {
 	struct clk *c = NULL;
-	u32 project_id = 0;
 	unsigned long camera_emc_enable_mini_rete = 0;
 	unsigned long cpu_emc_cur_rate = 0;
 	unsigned long emc_cur_rate = 0;
@@ -89,17 +87,7 @@ int Asus_camera_enable_set_emc_rate(unsigned long rate)
 		return -1;
 	}
 
-	project_id = tegra3_get_project_id();
-
-	if(project_id == TEGRA3_PROJECT_TF300T ||
-		project_id == TEGRA3_PROJECT_TF300TG ||
-		project_id == TEGRA3_PROJECT_TF300TL ||
-		project_id == TEGRA3_PROJECT_TF500T) {
-		camera_emc_enable_mini_rete = rate;
-	} else {
-		printk("%s : No permission to use this function if not TF300T serials or TF500T\n", __func__);
-		return -1;
-	}
+	camera_emc_enable_mini_rete = rate;
 
 	c = tegra_get_clock_by_name("emc");
 
@@ -197,16 +185,16 @@ static int gps_state_set(const char *arg, const struct kernel_param *kp)
 					if(emc_clk){
 						unsigned long	cpu_emc_cur_rate=clk_get_rate(emc_clk);
 						unsigned long	emc_cur_rate=clk_get_rate(c);
-						printk("tf201_gps_enable enable  c_cpu_emc->min_rate=%u cur_rate=%u c->min_rate=%u %u\n",emc_clk->min_rate,cpu_emc_cur_rate,c->min_rate,emc_cur_rate);
+						printk("tf201_gps_enable enable  c_cpu_emc->min_rate=%lu cur_rate=%lu c->min_rate=%lu %lu\n",emc_clk->min_rate,cpu_emc_cur_rate,c->min_rate,emc_cur_rate);
 						emc_clk->min_rate=MINMIAM_RATE;
 						c->min_rate=MINMIAM_RATE;
 						if(cpu_emc_cur_rate < emc_clk->min_rate ){
 							clk_set_rate(emc_clk,MINMIAM_RATE);
-							printk("tf201_gps_enable enable emc_clk cur_rate=%u\n",clk_get_rate(emc_clk));
+							printk("tf201_gps_enable enable emc_clk cur_rate=%lu\n",clk_get_rate(emc_clk));
 						}
 						if(emc_cur_rate < c->min_rate ){
 							clk_set_rate(c,MINMIAM_RATE);
-							printk("tf201_gps_enable enable C cur_rate=%u\n",clk_get_rate(c));
+							printk("tf201_gps_enable enable C cur_rate=%lu\n",clk_get_rate(c));
 						}
 					}//tegra_update_cpu_speed(620000);
 				}else{
@@ -286,6 +274,7 @@ static struct kernel_param_ops system_mode_ops = {
 	.get = system_mode_get,
 };
 module_param_cb(system_mode, &system_mode_ops, &system_mode, 0644);
+
 
 static unsigned int pwr_save=0;
 static unsigned int pwr_save_freq=HUNDSBUAH_SYSTEM_PWRSAVE_MODE_FREQUENCY;
@@ -478,6 +467,7 @@ static void edp_update_limit(void)
 		}
 	}
 	BUG_ON(i == 0);	/* min freq above the limit or table empty */
+	edp_limit = freq_table[i-1].frequency;
 #endif
 }
 
@@ -701,8 +691,6 @@ module_param_cb(pwr_cap_limit_4, &pwr_cap_ops, &pwr_cap_limits[3], 0644);
 #ifdef CONFIG_DEBUG_FS
 static int pwr_mode_table_debugfs_show(struct seq_file *s, void *data)
 {
-	int i;
-
 	seq_printf(s, "-- CPU power mode table --\n");
 	seq_printf(s, "Power Saving=%u \n Balanced=%u \n Normal=%u \n \n",
 			   power_mode_table[2],
@@ -1018,7 +1006,7 @@ static struct notifier_block tegra_cpu_pm_notifier = {
 	.notifier_call = tegra_pm_notify,
 };
 
-void rebuild_max_freq_table(max_rate)
+void rebuild_max_freq_table(unsigned int max_rate)
 {
 	power_mode_table[SYSTEM_NORMAL_MODE]  = (HUNDSBUAH_SYSTEM_NORMAL_MODE_FREQUENCY);
 	power_mode_table[SYSTEM_BALANCE_MODE] = (HUNDSBUAH_SYSTEM_BALANCE_MODE_FREQUENCY);
@@ -1027,12 +1015,6 @@ void rebuild_max_freq_table(max_rate)
 
 static int tegra_cpu_init(struct cpufreq_policy *policy)
 {
-	struct clk *c=NULL;
-	unsigned long  cpu_emc_cur_rate = 0;
-	unsigned long  emc_cur_rate = 0;
-
-	c=tegra_get_clock_by_name("emc");
-
 	if (policy->cpu >= CONFIG_NR_CPUS)
 		return -EINVAL;
 
@@ -1044,24 +1026,6 @@ static int tegra_cpu_init(struct cpufreq_policy *policy)
 	if (IS_ERR(emc_clk)) {
 		clk_put(cpu_clk);
 		return PTR_ERR(emc_clk);
-	}
-
-	if(!camera_enable)
-	{
-		cpu_emc_cur_rate = clk_get_rate(emc_clk);
-		emc_cur_rate = clk_get_rate(c);
-		printk(" %s : emc_clk->min_rate to %d\n", __func__, EMC_MINMIAM_RATE);
-		emc_clk->min_rate=EMC_MINMIAM_RATE;
-		c->min_rate=EMC_MINMIAM_RATE;
-
-		if(cpu_emc_cur_rate < emc_clk->min_rate )
-		{
-			clk_set_rate(emc_clk, EMC_MINMIAM_RATE);
-		}
-		if(emc_cur_rate < c->min_rate )
-		{
-			clk_set_rate(c, EMC_MINMIAM_RATE);
-		}
 	}
 
 	clk_enable(emc_clk);
