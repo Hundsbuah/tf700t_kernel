@@ -28,7 +28,7 @@
 /*                           */
 /*****************************/
 /* lp core */
-#define HUNDSBUAH_CPU_LP_FREQUENCY_CAP    (760)    /* MHz */
+#define HUNDSBUAH_CPU_LP_FREQUENCY_CAP    (620)    /* MHz */
 
 /* cap frequencys */
 #define HUNDSBUAH_CPU_FREQUENCY_CAP       (1900)   /* MHz */
@@ -71,7 +71,7 @@
  * high frequencys.
  * Just to be sure that boot_finished is set after pwr_cap_limit_1 was set!
  */
-#define HUNDSBUAH_CPU_BOOT_FREQUENCY   (1700)   /* MHz */
+#define HUNDSBUAH_CPU_BOOT_FREQUENCY   (1500)   /* MHz */
 
 /*****************************/
 /*                           */

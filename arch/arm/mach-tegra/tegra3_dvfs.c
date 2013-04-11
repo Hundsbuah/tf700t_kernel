@@ -204,7 +204,7 @@ static struct dvfs cpu_0_dvfs_table[] = {
 #define HOST1X ( HUNDSBUAH_MAX_HOST1X_FREQUENCY * 1000 ) 
 static struct dvfs core_dvfs_table[] = {
 	/* Core voltages (mV):		  	        950,     1000,     1050,     1100,     1150,        1200,        1250,     1300,     1350,     1375,     1410,     1430,   HUNDSBUAH_MAX_CORE_VOLTAGE } */
-	CORE_DVFS("cpu_lp",     2, 1, KHZ, 204000,   295000,   370000,   428000,   475000,      513000,      579000,   620000,   760000,   760000,   760000,   760000,   760000),
+	CORE_DVFS("cpu_lp",     2, 1, KHZ, 204000,   295000,   370000,   428000,   475000,      513000,      579000,   620000,   620000,   620000,   620000,   620000,   620000),
 	CORE_DVFS("emc",        2, 1, KHZ, 102000,   450000,   450000,   450000,   450000,      667000,      667000,   800000,   900000,   900000,   900000,   900000,   900000),
 	CORE_DVFS("sbus",       2, 1, KHZ, 102000,   205000,   205000,   227000,   227000,      267000,      334000,   334000,   334000,   334000,   334000,   334000,   334000),
 	CORE_DVFS("vi",         2, 1, KHZ,      1,   219000,   267000,   300000,   371000,      409000,      425000,   425000,   425000,   425000,   425000,   425000,   425000),
@@ -808,11 +808,34 @@ core_cap_state_store(struct kobject *kobj, struct kobj_attribute *attr,
 }
 
 static ssize_t
+gpu_voltages_show(struct kobject *kobj, struct kobj_attribute *attr,
+		    char *buf)
+{
+   unsigned int idx = 0;
+   int ret = 0;
+
+   for(idx = 0; idx <= HUNDSBUAH_CORE_MAXFREQ_IDX; idx++)
+   {
+      ret += sprintf (&buf[ret], "%d ", core_millivolts[idx]);
+   }
+
+   ret += sprintf(&buf[ret], "\n");
+
+	return ret;
+}
+
+static ssize_t
+gpu_voltages_store(struct kobject *kobj, struct kobj_attribute *attr,
+		     const char *buf, size_t count)
+{
+   return count;
+}
+
+static ssize_t
 core_cap_level_show(struct kobject *kobj, struct kobj_attribute *attr,
 		    char *buf)
 {
-	return sprintf(buf, "%d (%d)\n", tegra3_core_cap.level,
-			user_core_cap.level);
+	return sprintf(buf, "%d\n", tegra3_core_cap.level);
 }
 static ssize_t
 core_cap_level_store(struct kobject *kobj, struct kobj_attribute *attr,
@@ -936,12 +959,15 @@ static struct kobj_attribute cbus_state_attribute =
 	__ATTR(cbus_cap_state, 0644, cbus_cap_state_show, cbus_cap_state_store);
 static struct kobj_attribute cbus_level_attribute =
 	__ATTR(cbus_cap_level, 0644, cbus_cap_level_show, cbus_cap_level_store);
-
+static struct kobj_attribute gpu_voltages_attribute =
+	__ATTR(gpu_voltages, 0644, gpu_voltages_show, gpu_voltages_store);
+   
 const struct attribute *cap_attributes[] = {
 	&cap_state_attribute.attr,
 	&cap_level_attribute.attr,
 	&cbus_state_attribute.attr,
 	&cbus_level_attribute.attr,
+   &gpu_voltages_attribute.attr,
 	NULL,
 };
 
